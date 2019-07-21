@@ -9,16 +9,6 @@
 import UIKit
 
 
-class SubtitleTableViewCell: UITableViewCell {
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
 
 
 
@@ -28,14 +18,28 @@ class CountriesListViewController: UIViewController {
     
     var tableData: Cities?
     
+    lazy var mapButton: UIBarButtonItem = {
+        return UIBarButtonItem(title: "Map", style: .plain, target: self, action: #selector(openMaps))
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.setLeftBarButton(mapButton, animated: true)
+        
         title = "Countries"
         
-        tableView.register(SubtitleTableViewCell.self, forCellReuseIdentifier: "UITableViewCell")
+        let cell = UINib(nibName: "CountryTableViewCell", bundle: nil)
+        
+        tableView.register(cell, forCellReuseIdentifier: "UITableViewCell")
+        
         loadData()
         
+    }
+    
+    @objc func openMaps() {
+        let vc = MapViewFactory.makeMapWithNavigation()
+        present(vc, animated: true, completion: nil)
     }
     
     func loadData() {
@@ -61,22 +65,29 @@ extension CountriesListViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell", for: indexPath) as! CountryTableViewCell
         let data = tableData?[indexPath.row]
-        cell.textLabel?.text = data?.country
-        cell.detailTextLabel?.text = "\(data?.coord.lat ?? 0) , \(data?.coord.lon ?? 0)"
-        cell.imageView?.image = #imageLiteral(resourceName: "icon")
+        cell.countryName?.text = data?.country
+        cell.delegate = self
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let city = tableData?[indexPath.row]
-        
         let vc = WeatherDetailsViewController()
         vc.data = city
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    
 }
 
+
+extension CountriesListViewController: TableViewCellDelegate {
+    func didTab(_ button: UIButton, cell: UITableViewCell) {
+        guard let index = tableView.indexPath(for: cell) else { return }
+        let data = tableData?[index.row]
+        
+        let vc = MapViewFactory.makeMapWith((data?.coord.lon ?? 0, data?.coord.lat ?? 0))
+        navigationController?.pushViewController(vc, animated: true)
+        
+    }
+}
