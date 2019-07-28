@@ -24,6 +24,5 @@ extension CodableInit  {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = Self.decodingStrategy
         self = try decoder.decode(Self.self, from: data)
-
     }
 }

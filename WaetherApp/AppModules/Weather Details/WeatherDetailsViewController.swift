@@ -8,34 +8,58 @@
 
 import UIKit
 
-class WeatherDetailsViewController: UIViewController {
-    var data: CityModel?
-    
-    @IBOutlet weak var descriptionLabel: UILabel!
-    
-    @IBOutlet weak var currentDegreeLabel: UILabel!
-    
-    @IBOutlet weak var maxDegreeLabel: UILabel!
-    
-    @IBOutlet weak var minimumDegreeLabel: UILabel!
-    
 
+
+class WeatherDetailsViewController: UIViewController, WeatherDetailsViewModelDelegate {
+  
+    @IBOutlet weak var activityInidicator: UIActivityIndicatorView!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var backgroundImage: UIImageView!
+    @IBOutlet weak var currentDegreeLabel: UILabel!
+    @IBOutlet weak var maxDegreeLabel: UILabel!
+    @IBOutlet weak var minimumDegreeLabel: UILabel!
+    @IBOutlet weak var holderStack: UIStackView!
+    @IBOutlet weak var topConstraint: NSLayoutConstraint!
+    
+    
+    lazy var viewModel: WeatherDetailsViewModel = {
+        let vm = WeatherDetailsViewModel()
+        vm.delegate = self
+        return vm
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadData()
+        viewModel.loadData()
     }
     
     
-    func loadData() {
-        WeatherRequest.weather(id: data?.id ?? 0).send(WeatherResponse.self) { (response) in
-            switch response {
-            case .success(let value) :
-                print(value)
-                
-            case .failure(let error):
-                print(error)
-            }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.cancelDataLoading()
+    }
+    
+   
+    func animateLabels() {
+        topConstraint.constant = 200
+        UIView.animate(withDuration: 0.6) {
+            self.view.layoutIfNeeded()
+            self.backgroundImage.alpha = 1.0
         }
-        
+    }
+    
+    func fillViewData(data: WeatherCuratedData) {
+        descriptionLabel.text = data.description
+        currentDegreeLabel.text = data.currentDegree
+        maxDegreeLabel.text = data.maxDegree
+        minimumDegreeLabel.text = data.minDegree
+    }
+    
+    func startActivityIndicator() {
+        activityInidicator.startAnimating()
+    }
+    
+    func stopActivityIndicator() {
+        activityInidicator.stopAnimating()
     }
 }

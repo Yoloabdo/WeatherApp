@@ -9,9 +9,6 @@
 import UIKit
 
 
-
-
-
 class CountriesListViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
@@ -75,7 +72,7 @@ extension CountriesListViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let city = tableData?[indexPath.row]
         let vc = WeatherDetailsViewController()
-        vc.data = city
+        vc.viewModel.cityId = city?.id
         navigationController?.pushViewController(vc, animated: true)
     }
 }

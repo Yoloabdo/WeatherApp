@@ -52,6 +52,10 @@ extension APIRequestHandler {
         }
     }
     
+    
+    func cancelRequest() {
+        
+    }
   
 }
 

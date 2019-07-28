@@ -8,7 +8,7 @@ target 'WaetherApp' do
   # Pods for WaetherApp
   pod 'GoogleMaps'
   pod 'GooglePlaces'
-  pod 'Alamofire'
+  
   target 'WaetherAppTests' do
     inherit! :search_paths
     # Pods for testing

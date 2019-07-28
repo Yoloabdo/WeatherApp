@@ -22,6 +22,11 @@ struct WeatherResponse: CodableInit {
     let timezone, id: Int?
     let name: String?
     let cod: Int?
+    
+    static var decodingStrategy: JSONDecoder.KeyDecodingStrategy {
+        return .useDefaultKeys
+    }
+    
 }
 
 // MARK: - Clouds

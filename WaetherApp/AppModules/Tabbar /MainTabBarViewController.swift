@@ -10,7 +10,6 @@ import UIKit
 
 class MainTabBarViewController: UITabBarController {
     
-    
     lazy var countriesList: UINavigationController = {
         let vc = CountriesListViewController(nibName: "CountriesListViewController", bundle: nil)
         vc.tabBarItem.image = #imageLiteral(resourceName: "countries")
@@ -26,13 +25,9 @@ class MainTabBarViewController: UITabBarController {
     }()
     
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-
         setViewControllers([countriesList, profile], animated: true)
     }
     

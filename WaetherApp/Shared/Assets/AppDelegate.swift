@@ -14,9 +14,6 @@ import GooglePlaces
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    
-        
-
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -27,10 +24,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func startApplicationPoint() {
+        navigateToHome()
+    }
+    
+    
+    private func navigateToHome() {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = MainTabBarViewController()
         self.window?.makeKeyAndVisible()
     }
+    
+    
+    private func navigateToAuthetication() {
+        
+    }
+    
+    private func navigateToIntro() {
+        
+    }
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
